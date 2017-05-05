@@ -6,9 +6,15 @@ const CUSTOM_SERVICE_CHARACTERISTIC_UUID = 'b26f280f-e534-4705-86d6-b85c0fafc913
 
 const bleno = require('bleno');
 
+const getMessage = () => {
+    return Buffer.from(JSON.stringify({
+        message: 'Hi there!'
+    }, 'utf8'));
+};
+
 const messageCharacteristic = new bleno.Characteristic({
     uuid: CUSTOM_SERVICE_CHARACTERISTIC_UUID,
-    properties: ['read'],
+    properties: ['read', 'notify'],
     descriptors: [
         new bleno.Descriptor({
             uuid: '2901',
@@ -16,15 +22,21 @@ const messageCharacteristic = new bleno.Characteristic({
         })
     ],
     onReadRequest: (offset, callback) => {
+        if (offset) {
+            callback(bleno.Characteristic.RESULT_ATTR_NOT_LONG);
+        }
+
         console.log('Read request');
-
-        const message = JSON.stringify({
-            message: 'Hi there!'
-        });
-
-        callback(bleno.Characteristic.RESULT_SUCCESS, Buffer.from(message, 'utf8'));
+        callback(bleno.Characteristic.RESULT_SUCCESS, getMessage());
     }
 });
+
+setInterval(() => {
+    if (messageCharacteristic.updateValueCallback) {
+        console.log('Sending update');
+        messageCharacteristic.updateValueCallback(getMessage());
+    }
+}, 1000);
 
 const messageService = new bleno.PrimaryService({
     uuid: CUSTOM_SERVICE_UUID,
