@@ -5,10 +5,11 @@ const CUSTOM_SERVICE_UUID = '0e00bced-2e2a-4edb-9cc9-3c2a826ca1e9';
 const CUSTOM_SERVICE_CHARACTERISTIC_UUID = 'b26f280f-e534-4705-86d6-b85c0fafc913';
 
 const bleno = require('bleno');
+const NetworkManager = require('./network-manager');
 
-const getMessage = () => {
+const getMessage = (connected) => {
     return Buffer.from(JSON.stringify({
-        message: 'Hi there!'
+        connected: connected
     }, 'utf8'));
 };
 
@@ -27,16 +28,18 @@ const messageCharacteristic = new bleno.Characteristic({
         }
 
         console.log('Read request');
-        callback(bleno.Characteristic.RESULT_SUCCESS, getMessage());
+
+        NetworkManager.getConnectedState((connected) => {
+            callback(bleno.Characteristic.RESULT_SUCCESS, getMessage(connected));
+        });
     }
 });
 
-setInterval(() => {
+NetworkManager.onConnectedStateChange((connected) => {
     if (messageCharacteristic.updateValueCallback) {
-        console.log('Sending update');
-        messageCharacteristic.updateValueCallback(getMessage());
+        messageCharacteristic.updateValueCallback(getMessage(connected));
     }
-}, 1000);
+});
 
 const messageService = new bleno.PrimaryService({
     uuid: CUSTOM_SERVICE_UUID,

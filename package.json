@@ -28,6 +28,8 @@
   },
   "homepage": "https://github.com/resin-io-playground/rpi3-bluetooth-peripheral#readme",
   "dependencies": {
-    "bleno": "^0.4.2"
+    "bleno": "^0.4.2",
+    "bluebird": "^3.5.0",
+    "dbus": "0.2.19"
   }
 }

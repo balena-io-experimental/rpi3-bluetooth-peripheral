@@ -2,6 +2,7 @@ FROM resin/raspberry-pi3-node
 
 # install required packages
 RUN apt-get update && apt-get install -yq --no-install-recommends \
+    libdbus-1-dev \
     bluez \
     bluez-firmware && \
     apt-get clean && rm -rf /var/lib/apt/lists/*

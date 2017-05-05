@@ -28,7 +28,7 @@ function connect() {
 
             setTimeout(() => {
                 device.gatt.disconnect();
-            }, 10 * 1000);
+            }, 60 * 1000);
         });
     }).catch((err) => console.error(err));
 }
