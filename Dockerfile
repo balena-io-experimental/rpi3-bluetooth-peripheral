@@ -1,4 +1,4 @@
-FROM resin/%%RESIN_MACHINE_NAME%%-node
+FROM resin/raspberry-pi3-node
 
 # install required packages
 RUN apt-get update && apt-get install -yq --no-install-recommends \

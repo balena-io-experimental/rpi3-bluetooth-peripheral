@@ -4,6 +4,7 @@
   "description": "Raspberry Pi 3 bluetooth peripheral example, using Bleno",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
