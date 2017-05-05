@@ -27,7 +27,8 @@ const messageCharacteristic = new bleno.Characteristic({
 
         console.log('Read request');
 
-        NetworkManager.getConnectedState((connected) => {
+        NetworkManager.getConnectedState()
+        .then((connected) => {
             callback(bleno.Characteristic.RESULT_SUCCESS, getMessage(connected));
         });
     }
