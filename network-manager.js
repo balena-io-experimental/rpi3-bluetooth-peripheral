@@ -23,7 +23,7 @@ const getManager = () => {
 
 exports.getConnectedState = () => {
     getManager()
-    .then((manager) => CheckConnectivityAsync())
+    .then((manager) => manager.CheckConnectivityAsync())
     .then((state) => state === NM_CONNECTIVITY_FULL);
 };
 
