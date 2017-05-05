@@ -1,6 +1,4 @@
-const DEVICE_NAME = process.env.BLENO_DEVICE_NAME = 'resin-' + (
-    process.env.RESIN_DEVICE_UUID || process.env.HOSTNAME || 'local'
-);
+const DEVICE_NAME = process.env.BLENO_DEVICE_NAME = 'resin-' + (process.env.HOSTNAME || 'local');
 const CUSTOM_SERVICE_UUID = '0e00bced-2e2a-4edb-9cc9-3c2a826ca1e9';
 const CUSTOM_SERVICE_CHARACTERISTIC_UUID = 'b26f280f-e534-4705-86d6-b85c0fafc913';
 
