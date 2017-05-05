@@ -25,8 +25,6 @@ const messageCharacteristic = new bleno.Characteristic({
             callback(bleno.Characteristic.RESULT_ATTR_NOT_LONG);
         }
 
-        console.log('Read request');
-
         NetworkManager.getConnectedState()
         .then((connected) => {
             callback(bleno.Characteristic.RESULT_SUCCESS, getMessage(connected));
@@ -46,8 +44,6 @@ const messageService = new bleno.PrimaryService({
 });
 
 bleno.on('stateChange', (state) => {
-    console.log('State:', state);
-
     if (state === 'poweredOn') {
         bleno.startAdvertising(DEVICE_NAME, [CUSTOM_SERVICE_UUID], (err) => {
             if (err) {

@@ -13,7 +13,6 @@ const getManager = () => {
         manager = bus.getInterfaceAsync(SERVICE, '/org/freedesktop/NetworkManager', SERVICE)
         .delay(1000)
         .tap((manager) => manager.on('StateChanged', (state) => {
-            console.log('Connected state changed', state);
             connectedStateChangeCallback(state === NM_STATE_CONNECTED_GLOBAL);
         }));
     }
@@ -24,10 +23,7 @@ const getManager = () => {
 exports.getConnectedState = () => {
     return getManager()
     .then((manager) => manager.stateAsync())
-    .then((state) => {
-        console.log('Connected state read got', state);
-        return state === NM_STATE_CONNECTED_GLOBAL;
-    });
+    .then((state) => state === NM_STATE_CONNECTED_GLOBAL);
 };
 
 exports.onConnectedStateChange = (callback) => {
