@@ -8,8 +8,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 function connect() {
-    window.devices = [];
-
     navigator.bluetooth.requestDevice({
         filters: [{
             services: [CUSTOM_SERVICE_UUID]
@@ -19,10 +17,22 @@ function connect() {
         return device.gatt.connect()
         .then((server) => server.getPrimaryService(CUSTOM_SERVICE_UUID))
         .then((service) => service.getCharacteristic(CUSTOM_SERVICE_CHARACTERISTIC_UUID))
-        .then((characteristic) => characteristic.readValue())
-        .then((value) => {
-            console.log('Read:', JSON.parse(new TextDecoder('utf8').decode(value)));
-            device.gatt.disconnect();
+        .then((characteristic) => {
+            characteristic.startNotifications();
+            characteristic.addEventListener('characteristicvaluechanged', (event) => {
+                console.log('Update:', getMessage(event.target.value));
+            });
+            return characteristic.readValue();
+        }).then((data) => {
+            console.log('Initial value:', getMessage(data));
+
+            setTimeout(() => {
+                device.gatt.disconnect();
+            }, 10 * 1000);
         });
     }).catch((err) => console.error(err));
+}
+
+function getMessage(data) {
+    return JSON.parse(new TextDecoder('utf8').decode(data))
 }
