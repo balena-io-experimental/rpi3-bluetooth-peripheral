@@ -17,10 +17,12 @@ function connect() {
     }).then((device) => {
         console.log('Found device:', device.name);
         return device.gatt.connect()
-    }).then((server) => server.getPrimaryService(CUSTOM_SERVICE_UUID))
-    .then((service) => service.getCharacteristic(CUSTOM_SERVICE_CHARACTERISTIC_UUID))
-    .then((characteristic) => characteristic.readValue())
-    .then((value) => {
-        console.log('Read:', JSON.parse(new TextDecoder('utf8').decode(value)));
+        .then((server) => server.getPrimaryService(CUSTOM_SERVICE_UUID))
+        .then((service) => service.getCharacteristic(CUSTOM_SERVICE_CHARACTERISTIC_UUID))
+        .then((characteristic) => characteristic.readValue())
+        .then((value) => {
+            console.log('Read:', JSON.parse(new TextDecoder('utf8').decode(value)));
+            device.gatt.disconnect();
+        });
     }).catch((err) => console.error(err));
 }
