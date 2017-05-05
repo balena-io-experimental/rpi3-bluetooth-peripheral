@@ -1,7 +1,6 @@
 const DBus = require('./dbus-promise');
 
 const NM_STATE_CONNECTED_GLOBAL = 70;
-const NM_CONNECTIVITY_FULL = 4;
 
 const SERVICE = 'org.freedesktop.NetworkManager';
 
@@ -24,10 +23,10 @@ const getManager = () => {
 
 exports.getConnectedState = () => {
     return getManager()
-    .then((manager) => manager.CheckConnectivityAsync())
+    .then((manager) => manager.stateAsync())
     .then((state) => {
         console.log('Connected state read got', state);
-        return state === NM_CONNECTIVITY_FULL
+        return state === NM_STATE_CONNECTED_GLOBAL;
     });
 };
 
