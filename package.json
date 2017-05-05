@@ -1,0 +1,32 @@
+{
+  "name": "rpi3-bluetooth-peripheral",
+  "version": "1.0.0",
+  "description": "Raspberry Pi 3 bluetooth peripheral example, using Bleno",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/resin-io-playground/rpi3-bluetooth-peripheral.git"
+  },
+  "keywords": [
+    "raspberry-pi",
+    "pi",
+    "bluetooth",
+    "peripheral",
+    "bleno",
+    "ble",
+    "client",
+    "iot"
+  ],
+  "author": "Tim Perry <pimterry@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/resin-io-playground/rpi3-bluetooth-peripheral/issues"
+  },
+  "homepage": "https://github.com/resin-io-playground/rpi3-bluetooth-peripheral#readme",
+  "dependencies": {
+    "bleno": "^0.4.2"
+  }
+}

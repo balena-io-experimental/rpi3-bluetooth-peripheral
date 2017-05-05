@@ -1,7 +1,4 @@
-# base-image for python on any machine using a template variable,
-# see more about dockerfile templates here: http://docs.resin.io/deployment/docker-templates/
-# and about resin base images here: http://docs.resin.io/runtime/resin-base-images/
-FROM resin/%%RESIN_MACHINE_NAME%%-python
+FROM resin/%%RESIN_MACHINE_NAME%%-node
 
 # install required packages
 RUN apt-get update && apt-get install -yq --no-install-recommends \
@@ -9,14 +6,15 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     bluez-firmware && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# define our working directory in the container
 WORKDIR usr/src/app
 
-# copy all files in our root to the working directory
+COPY package.json ./
+RUN JOBS=MAX npm i --production
+
 COPY . ./
 
-# enable systemd init system in the container
+# enable systemd init system in the container so it doesn't restart
 ENV INITSYSTEM on
 
-# scan.sh will run when the container starts up on the device
-CMD ["bash", "scan.sh"]
+# Run start.sh when the container starts up on the device
+CMD ["bash", "start.sh"]
