@@ -5,19 +5,19 @@ const CUSTOM_SERVICE_CHARACTERISTIC_UUID = 'b26f280f-e534-4705-86d6-b85c0fafc913
 const bleno = require('bleno');
 const NetworkManager = require('./network-manager');
 
-const getMessage = (connected) => {
+const getConnectivityMessage = (connected) => {
     return Buffer.from(JSON.stringify({
         connected: connected
     }, 'utf8'));
 };
 
-const messageCharacteristic = new bleno.Characteristic({
+const connectivityCharacteristic = new bleno.Characteristic({
     uuid: CUSTOM_SERVICE_CHARACTERISTIC_UUID,
     properties: ['read', 'notify'],
     descriptors: [
         new bleno.Descriptor({
             uuid: '2901',
-            value: 'Message from the device'
+            value: 'Device connectivity'
         })
     ],
     onReadRequest: (offset, callback) => {
@@ -25,22 +25,21 @@ const messageCharacteristic = new bleno.Characteristic({
             callback(bleno.Characteristic.RESULT_ATTR_NOT_LONG);
         }
 
-        NetworkManager.getConnectedState()
-        .then((connected) => {
-            callback(bleno.Characteristic.RESULT_SUCCESS, getMessage(connected));
+        NetworkManager.getConnectedState().then((connected) => {
+            callback(bleno.Characteristic.RESULT_SUCCESS, getConnectivityMessage(connected));
         });
     }
 });
 
 NetworkManager.onConnectedStateChange((connected) => {
-    if (messageCharacteristic.updateValueCallback) {
-        messageCharacteristic.updateValueCallback(getMessage(connected));
+    if (connectivityCharacteristic.updateValueCallback) {
+        connectivityCharacteristic.updateValueCallback(getConnectivityMessage(connected));
     }
 });
 
-const messageService = new bleno.PrimaryService({
+const connectivityService = new bleno.PrimaryService({
     uuid: CUSTOM_SERVICE_UUID,
-    characteristics: [messageCharacteristic]
+    characteristics: [connectivityCharacteristic]
 });
 
 bleno.on('stateChange', (state) => {
@@ -49,7 +48,7 @@ bleno.on('stateChange', (state) => {
             if (err) {
                 console.log(err);
             } else {
-                bleno.setServices([messageService]);
+                bleno.setServices([connectivityService]);
                 console.log('Broadcasting!');
             }
         });
